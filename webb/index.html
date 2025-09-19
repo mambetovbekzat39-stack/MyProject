@@ -1,0 +1,781 @@
+<!DOCTYPE html>
+<html lang="ky">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>БАСКЫЧТАР - Веб разработчиктер империясы</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Orbitron', monospace;
+            background: #0a0a0a;
+            color: #fff;
+            overflow-x: hidden;
+            cursor: none;
+        }
+
+        .cursor {
+            position: fixed;
+            width: 20px;
+            height: 20px;
+            background: radial-gradient(circle, #00ffff, transparent);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 10000;
+            transition: transform 0.1s ease;
+        }
+
+        .cursor-trail {
+            position: fixed;
+            width: 6px;
+            height: 6px;
+            background: #ff0080;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9999;
+            opacity: 0;
+        }
+
+        .matrix-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -2;
+            background: #000;
+        }
+
+        .matrix-char {
+            position: absolute;
+            color: #00ff00;
+            font-family: monospace;
+            font-size: 18px;
+            animation: matrix-fall linear infinite;
+        }
+
+        @keyframes matrix-fall {
+            0% {
+                transform: translateY(-100vh);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(100vh);
+                opacity: 0;
+            }
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            position: relative;
+            background: radial-gradient(ellipse at center, rgba(0, 255, 255, 0.1) 0%, transparent 50%);
+        }
+
+        .glitch {
+            font-size: 4rem;
+            font-weight: 900;
+            text-transform: uppercase;
+            position: relative;
+            color: #fff;
+            letter-spacing: 5px;
+            animation: glitch-skew 1s infinite linear alternate-reverse;
+        }
+
+        .glitch::before,
+        .glitch::after {
+            content: attr(data-text);
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        .glitch::before {
+            animation: glitch-anim 0.5s infinite linear alternate-reverse;
+            color: #ff0080;
+            z-index: -1;
+        }
+
+        .glitch::after {
+            animation: glitch-anim2 0.5s infinite linear alternate-reverse;
+            color: #00ffff;
+            z-index: -2;
+        }
+
+        @keyframes glitch-anim {
+            0% {
+                clip: rect(10px, 9999px, 31px, 0);
+                transform: skew(0.85deg);
+            }
+            5% {
+                clip: rect(70px, 9999px, 71px, 0);
+                transform: skew(0.95deg);
+            }
+            10% {
+                clip: rect(30px, 9999px, 71px, 0);
+                transform: skew(0.35deg);
+            }
+            /* ... additional keyframes */
+            100% {
+                clip: rect(67px, 9999px, 98px, 0);
+                transform: skew(0.15deg);
+            }
+        }
+
+        @keyframes glitch-anim2 {
+            0% {
+                clip: rect(65px, 9999px, 119px, 0);
+                transform: skew(0.15deg);
+            }
+            /* ... similar pattern */
+            100% {
+                clip: rect(37px, 9999px, 122px, 0);
+                transform: skew(0.05deg);
+            }
+        }
+
+        @keyframes glitch-skew {
+            0% {
+                transform: skew(2deg);
+            }
+            100% {
+                transform: skew(-1deg);
+            }
+        }
+
+        .subtitle {
+            font-size: 1.5rem;
+            margin-top: 20px;
+            background: linear-gradient(45deg, #ff0080, #00ffff, #ff0080);
+            background-size: 200% 200%;
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: gradient-wave 3s ease infinite;
+        }
+
+        @keyframes gradient-wave {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        .floating-code {
+            position: absolute;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            opacity: 0.3;
+            animation: float-code 8s linear infinite;
+        }
+
+        @keyframes float-code {
+            0% {
+                transform: translateY(100vh) translateX(-10px);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.7;
+            }
+            90% {
+                opacity: 0.7;
+            }
+            100% {
+                transform: translateY(-100px) translateX(10px);
+                opacity: 0;
+            }
+        }
+
+        .section {
+            margin: 100px 0;
+            padding: 50px;
+            background: linear-gradient(135deg, rgba(255, 0, 128, 0.1), rgba(0, 255, 255, 0.1));
+            border: 2px solid transparent;
+            background-clip: padding-box;
+            border-radius: 20px;
+            backdrop-filter: blur(20px);
+            position: relative;
+            overflow: hidden;
+            transition: all 0.5s ease;
+        }
+
+        .section:hover {
+            transform: scale(1.02);
+            box-shadow: 0 30px 60px rgba(0, 255, 255, 0.3);
+        }
+
+        .section::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(45deg, #ff0080, #00ffff, #ff0080);
+            border-radius: 20px;
+            z-index: -1;
+            animation: border-glow 3s linear infinite;
+        }
+
+        @keyframes border-glow {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 1; }
+        }
+
+        .section h2 {
+            font-size: 2.5rem;
+            margin-bottom: 30px;
+            text-align: center;
+            background: linear-gradient(45deg, #fff, #00ffff);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .web-technologies {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 30px;
+            margin: 40px 0;
+        }
+
+        .tech-card {
+            background: rgba(0, 0, 0, 0.7);
+            border-radius: 15px;
+            padding: 30px;
+            text-align: center;
+            border: 1px solid rgba(0, 255, 255, 0.3);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .tech-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(0, 255, 255, 0.2), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .tech-card:hover::before {
+            left: 100%;
+        }
+
+        .tech-card:hover {
+            transform: translateY(-10px) rotateX(10deg);
+            box-shadow: 0 20px 40px rgba(0, 255, 255, 0.4);
+        }
+
+        .tech-icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            display: block;
+        }
+
+        .kyrgyz-web-demo {
+            background: #111;
+            border-radius: 15px;
+            padding: 30px;
+            margin: 40px 0;
+            border: 2px solid #00ffff;
+            position: relative;
+        }
+
+        .browser-mockup {
+            background: #2a2a2a;
+            border-radius: 10px 10px 0 0;
+            padding: 15px;
+            border-bottom: 2px solid #444;
+        }
+
+        .browser-controls {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .browser-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+
+        .close { background: #ff5f57; }
+        .minimize { background: #ffbd2e; }
+        .maximize { background: #28ca42; }
+
+        .url-bar {
+            background: #444;
+            color: #fff;
+            padding: 8px 15px;
+            border-radius: 20px;
+            margin-left: 20px;
+            flex: 1;
+            font-family: 'Courier New', monospace;
+        }
+
+        .website-content {
+            background: #fff;
+            color: #333;
+            padding: 40px;
+            min-height: 300px;
+            position: relative;
+        }
+
+        .code-editor {
+            background: #1a1a1a;
+            color: #00ff00;
+            font-family: 'Courier New', monospace;
+            padding: 30px;
+            border-radius: 10px;
+            margin: 30px 0;
+            overflow-x: auto;
+            border: 1px solid #333;
+            position: relative;
+        }
+
+        .code-line {
+            margin: 5px 0;
+            position: relative;
+            padding-left: 40px;
+        }
+
+        .line-number {
+            position: absolute;
+            left: 10px;
+            color: #666;
+            user-select: none;
+        }
+
+        .typing-animation {
+            border-right: 2px solid #00ff00;
+            animation: blink 1s infinite;
+        }
+
+        @keyframes blink {
+            0%, 50% { border-color: transparent; }
+            51%, 100% { border-color: #00ff00; }
+        }
+
+        .interactive-demo {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin: 40px 0;
+        }
+
+        .demo-input {
+            background: rgba(0, 0, 0, 0.8);
+            border: 2px solid #00ffff;
+            border-radius: 10px;
+            padding: 20px;
+            color: #fff;
+            font-size: 16px;
+            font-family: inherit;
+            resize: vertical;
+            min-height: 200px;
+        }
+
+        .demo-output {
+            background: #fff;
+            color: #333;
+            border-radius: 10px;
+            padding: 20px;
+            min-height: 200px;
+            border: 2px solid #ff0080;
+        }
+
+        .stats-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            margin: 50px 0;
+        }
+
+        .stat-card {
+            background: rgba(0, 0, 0, 0.8);
+            border-radius: 15px;
+            padding: 30px;
+            text-align: center;
+            border: 2px solid transparent;
+            background-clip: padding-box;
+            position: relative;
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            padding: 2px;
+            background: linear-gradient(45deg, #ff0080, #00ffff);
+            border-radius: inherit;
+            mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            mask-composite: exclude;
+            z-index: -1;
+        }
+
+        .stat-number {
+            font-size: 3rem;
+            font-weight: bold;
+            color: #00ffff;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        .hologram {
+            position: relative;
+            display: inline-block;
+            animation: hologram-flicker 2s infinite;
+        }
+
+        @keyframes hologram-flicker {
+            0%, 100% { 
+                opacity: 1;
+                text-shadow: 0 0 10px #00ffff, 0 0 20px #00ffff, 0 0 30px #00ffff;
+            }
+            50% { 
+                opacity: 0.8;
+                text-shadow: 0 0 5px #00ffff, 0 0 10px #00ffff, 0 0 15px #00ffff;
+            }
+        }
+
+        .particle-system {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: #00ffff;
+            border-radius: 50%;
+            animation: particle-float 4s linear infinite;
+        }
+
+        @keyframes particle-float {
+            0% {
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-10px) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        .neon-button {
+            background: transparent;
+            color: #00ffff;
+            border: 2px solid #00ffff;
+            padding: 15px 30px;
+            font-size: 18px;
+            font-family: 'Orbitron', monospace;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin: 10px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .neon-button:hover {
+            color: #000;
+            background: #00ffff;
+            box-shadow: 0 0 20px #00ffff, 0 0 40px #00ffff;
+            text-shadow: none;
+        }
+
+        .neon-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .neon-button:hover::before {
+            left: 100%;
+        }
+
+        @media (max-width: 768px) {
+            .glitch { font-size: 2.5rem; }
+            .interactive-demo { grid-template-columns: 1fr; }
+            .section { padding: 30px 20px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="cursor" id="cursor"></div>
+    <div class="matrix-bg" id="matrixBg"></div>
+    <div class="particle-system" id="particleSystem"></div>
+    
+    <div class="container">
+        <!-- Hero Section -->
+        <section class="hero">
+            <div class="floating-code" style="top: 10%; left: 10%;">const кыргызча = "биздин тил";</div>
+            <div class="floating-code" style="top: 20%; right: 15%;">function жасаймыз() { return "сайт"; }</div>
+            <div class="floating-code" style="top: 60%; left: 5%;">веб.разработчик.кыргыз();</div>
+            
+            <h1 class="glitch" data-text="БАСКЫЧТАР">БАСКЫЧТАР</h1>
+            <p class="subtitle hologram">🌐 ВЕБ РАЗРАБОТЧИКТЕРДИН ИМПЕРИЯСЫ 🌐</p>
+            <p style="font-size: 1.2rem; margin-top: 20px; color: #00ffff;">
+                Кыргыз тилин диджитал дүйнөгө алып келүүчү тайпа
+            </p>
+        </section>
+
+        <!-- Веб технологиялар -->
+        <section class="section">
+            <h2>⚡ БИЗДИН КҮЧТҮҮ КУРАЛДАР ⚡</h2>
+            <div class="web-technologies">
+                <div class="tech-card">
+                    <span class="tech-icon">🌐</span>
+                    <h3>HTML</h3>
+                    <p>Гипертекст белгилөө тили</p>
+                    <p style="color: #00ffff;">Веб-баракчанын негизи</p>
+                </div>
+                <div class="tech-card">
+                    <span class="tech-icon">🎨</span>
+                    <h3>CSS</h3>
+                    <p>Каскаддуу стиль барактары</p>
+                    <p style="color: #00ffff;">Сулуулук берүүчү</p>
+                </div>
+                <div class="tech-card">
+                    <span class="tech-icon">⚡</span>
+                    <h3>JavaScript</h3>
+                    <p>Интерактивдүүлүк тили</p>
+                    <p style="color: #00ffff;">Жан кирүүчү код</p>
+                </div>
+                <div class="tech-card">
+                    <span class="tech-icon">⚛️</span>
+                    <h3>React</h3>
+                    <p>Компонент китепканасы</p>
+                    <p style="color: #00ffff;">Азыркы UI</p>
+                </div>
+                <div class="tech-card">
+                    <span class="tech-icon">📱</span>
+                    <h3>Responsive</h3>
+                    <p>Жооп берүүчү дизайн</p>
+                    <p style="color: #00ffff;">Бардык экрандарда</p>
+                </div>
+                <div class="tech-card">
+                    <span class="tech-icon">🚀</span>
+                    <h3>Кыргызча API</h3>
+                    <p>Мамлекеттик тилде</p>
+                    <p style="color: #00ffff;">Өз тилибизде код</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Кыргызча веб демо -->
+        <section class="section">
+            <h2>🇰🇬 КЫРГЫЗЧА ВЕБ ПРОГРАММАЛОО 🇰🇬</h2>
+            
+            <div class="kyrgyz-web-demo">
+                <div class="browser-mockup">
+                    <div class="browser-controls">
+                        <div class="browser-dot close"></div>
+                        <div class="browser-dot minimize"></div>
+                        <div class="browser-dot maximize"></div>
+                        <div class="url-bar">https://кыргыз-сайт.kg</div>
+                    </div>
+                </div>
+                <div class="website-content">
+                    <h3 style="color: #333; text-align: center;">Кош келиңиз, биздин кыргызча сайтка!</h3>
+                    <p style="color: #666; text-align: center; margin-top: 20px;">
+                        Бул сайт толугу менен кыргыз тилинде жасалган
+                    </p>
+                    <div style="text-align: center; margin-top: 30px;">
+                        <button style="background: #ff0080; color: white; border: none; padding: 10px 20px; border-radius: 5px;">
+                            Баштоо
+                        </button>
+                        <button style="background: #00ffff; color: black; border: none; padding: 10px 20px; border-radius: 5px; margin-left: 10px;">
+                            Көбүрөөк
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="code-editor">
+                <div class="code-line"><span class="line-number">1</span>&lt;!-- Кыргызча HTML --&gt;</div>
+                <div class="code-line"><span class="line-number">2</span>&lt;башты&gt;</div>
+                <div class="code-line"><span class="line-number">3</span>&nbsp;&nbsp;&lt;аты&gt;Кыргыз сайты&lt;/аты&gt;</div>
+                <div class="code-line"><span class="line-number">4</span>&lt;/башты&gt;</div>
+                <div class="code-line"><span class="line-number">5</span>&lt;дене&gt;</div>
+                <div class="code-line"><span class="line-number">6</span>&nbsp;&nbsp;&lt;сөз классы="чоң"&gt;Салам дүйнө!&lt;/сөз&gt;</div>
+                <div class="code-line"><span class="line-number">7</span>&nbsp;&nbsp;&lt;баскыч басуу="саламдашуу()"&gt;Басыңыз&lt;/баскыч&gt;</div>
+                <div class="code-line"><span class="line-number">8</span>&lt;/дене&gt;</div>
+                <div class="code-line typing-animation"><span class="line-number">9</span>&nbsp;</div>
+            </div>
+        </section>
+
+        <!-- Интерактивдүү демо -->
+        <section class="section">
+            <h2>🎮 ТИРҮҮ ДЕМО - КОД ЖАЗЫП КӨРҮҢҮЗ! 🎮</h2>
+            
+            <div class="interactive-demo">
+                <div>
+                    <h3>Кыргызча HTML жазыңыз:</h3>
+                    <textarea class="demo-input" id="htmlInput" placeholder="Мисалы: &lt;сөз&gt;Салам кыргыз тили!&lt;/сөз&gt;">
+&lt;башкы&gt;Кыргыз тили - биздин байлыгыбыз&lt;/башкы&gt;
+&lt;абзац&gt;Веб разработчиктер болуп, өз тилибизди интернетке алып келебiz!&lt;/абзац&gt;
+&lt;тизме&gt;
+  &lt;пункт&gt;HTML үйрөнүү&lt;/пункт&gt;
+  &lt;пункт&gt;CSS менен сүйлөшүү&lt;/пункт&gt;
+  &lt;пункт&gt;JavaScript менен жандануу&lt;/пункт&gt;
+&lt;/тизме&gt;</textarea>
+                </div>
+                <div>
+                    <h3>Натыйжа:</h3>
+                    <div class="demo-output" id="htmlOutput">
+                        <h1>Кыргыз тили - биздин байлыгыбыз</h1>
+                        <p>Веб разработчиктер болуп, өз тилибизди интернетке алып келебиз!</p>
+                        <ul>
+                            <li>HTML үйрөнүү</li>
+                            <li>CSS менен сүйлөшүү</li>
+                            <li>JavaScript менен жандануу</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <div style="text-align: center;">
+                <button class="neon-button" onclick="updateDemo()">Жаңыртуу</button>
+                <button class="neon-button" onclick="clearDemo()">Тазалоо</button>
+            </div>
+        </section>
+
+        <!-- Статистика -->
+        <section class="section">
+            <h2>📊 БАСКЫЧТАР ИМПЕРИЯСЫНЫН СТАТИСТИКАСЫ 📊</h2>
+            
+            <div class="stats-container">
+                <div class="stat-card">
+                    <span class="stat-number hologram" id="websitesCreated">0</span>
+                    <p>Кыргызча сайттар жасалды</p>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-number hologram" id="codeLines">0</span>
+                    <p>Код саптары жазылды</p>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-number hologram" id="developers">0</span>
+                    <p>Кыргыз веб-разработчиктер</p>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-number hologram" id="kyrgyzWords">0</span>
+                    <p>Кыргызча программа сөздөр</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Биздин миссия -->
+        <section class="section">
+            <h2>🎯 БИЗДИН УКМУШТУУ МИССИЯБЫЗ 🎯</h2>
+            
+            <div style="text-align: center; font-size: 1.5rem; line-height: 1.8;">
+                <p class="hologram">🌟 Кыргыз тилин диджитал дүйнөнүн падышасы кылуу!</p>
+                <p style="margin: 30px 0;">⚡ Ар бир веб-сайтта кыргызча код болсун!</p>
+                <p>🚀 Программалоо тили болуп кыргызча калыптанышы керек!</p>
+            </div>
+            
+            <div style="text-align: center; margin-top: 50px;">
+                <button class="neon-button" onclick="showMessage()">Биздин кредо</button>
+                <button class="neon-button" onclick="startCoding()">Код жазып баштоо</button>
+            </div>
+            
+            <div id="messageArea" style="margin-top: 30px; text-align: center; font-size: 1.2rem;"></div>
+        </section>
+    </div>
+
+    <script>
+        // Курсор эффектин жасоо
+        const cursor = document.getElementById('cursor');
+        let cursorTrails = [];
+        
+        document.addEventListener('mousemove', (e) => {
+            cursor.style.left = e.clientX + 'px';
+            cursor.style.top = e.clientY + 'px';
+            
+            // Курсордун изин жасоо
+            if (cursorTrails.length < 10) {
+                const trail = document.createElement('div');
+                trail.className = 'cursor-trail';
+                trail.style.left = e.clientX + 'px';
+                trail.style.top = e.clientY + 'px';
+                document.body.appendChild(trail);
+                cursorTrails.push(trail);
+                
+                setTimeout(() => {
+                    trail.style.opacity = '1';
+                    setTimeout(() => {
+                        trail.style.opacity = '0';
+                        setTimeout(() => {
+                            document.body.removeChild(trail);
+                            cursorTrails = cursorTrails.filter(t => t !== trail);
+                        }, 300);
+                    }, 100);
+                }, 50);
+            }
+        });
+
+        // Matrix жамгыр эффекти
+        function createMatrix() {
+            const matrixBg = document.getElementById('matrixBg');
+            const chars = 'қғңөүӨҮҚҒҢ01жшцхчькбмнтрпскгфвап';
+            
+            setInterval(() => {
+                const char = document.createElement('div');
+                char.className = 'matrix-char';
+                char.textContent = chars[Math.floor(Math.random() * chars.length)];
+                char.style.left = Math.random() * 100 + '%';
+                char.style.animationDuration = (Math.random() * 3 + 2) + 's';
+                char.style.opacity = Math.random();
+                matrixBg.appendChild(char);
+                
+                setTimeout(() => {
+                    matrixBg.removeChild(char);
+                }, 5000);
+            }, 100);
+        }
+
+        // Бөлүкчөлөр системас
